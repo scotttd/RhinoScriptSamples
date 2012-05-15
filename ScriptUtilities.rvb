@@ -22,3 +22,15 @@ End Function
 Function QuoteString(ByVal str)
   QuoteString = Chr(34) & CStr(str) & Chr(34)
 End Function  
+
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+' Returns a Boolean value indicating whether an array has been dimensioned.
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+Function IsUpperBound(ByVal arr)
+  IsUpperBound = False
+  If IsArray(arr) Then
+    On Error Resume Next
+    UBound arr
+    If Err.Number = 0 Then IsUpperBound = True
+  End If
+End Function
