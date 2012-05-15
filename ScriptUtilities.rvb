@@ -1,0 +1,24 @@
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+' ScriptUtilities.rvb -- January 2011
+' If this code works, it was written by Dale Fugier.
+' If not, I don't know who wrote it.
+' Works with Rhino 4.0.
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+Option Explicit
+
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+' Returns a Boolean value indicating whether an expression can be evaluated
+' as a string
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+Function IsString(ByVal str)
+  IsString = False
+  If VarType(str) = vbString Then IsString = True
+End Function
+  
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+' Surrounds a string with double-quote characters.
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+Function QuoteString(ByVal str)
+  QuoteString = Chr(34) & CStr(str) & Chr(34)
+End Function  

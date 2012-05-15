@@ -3,13 +3,13 @@
 ' If this code works, it was written by Dale Fugier.
 ' If not, I don't know who wrote it.
 ' Works with Rhino 4.0.
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
 Option Explicit
 
 '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 ' Calculates the area of a triangle using the Heron formula.
 '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-
 Function TriangleArea(pt0, pt1, pt2)
   Dim a, b, c, s, rc
   a = Rhino.Distance(pt0, pt1)  
