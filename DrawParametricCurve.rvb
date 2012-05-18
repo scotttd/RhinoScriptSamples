@@ -4,7 +4,6 @@
 ' If not, I don't know who wrote it.
 ' Works with Rhino 4.0.
 '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-
 Option Explicit
 
 '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
@@ -55,14 +54,14 @@ End Sub
 ' Function:   CalculatePoint
 ' Purpose:    Customizable function that solves a parametric equation.
 '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-Function CalculatePoint(t, a, b)
+Function CalculatePoint(t)
   Dim arrPoint(2)
   If IsNumeric(t) Then
-    arrPoint(0) = a * Cos(t)
-    arrPoint(1) = b * Sin(t)
-    arrPoint(2) = 0
+    arrPoint(0) = (4 * (1 - t) + 1 * t) * Sin(3 * 6.2832 * t)
+    arrPoint(1) = (4 * (1 - t) + 1 * t) * Cos(3 * 6.2832 * t)
+    arrPoint(2) = 5 * t
     CalculatePoint = arrPoint
   Else
-    CalculatePoint = vbNull
+    CalculatePoint = Null
   End If
 End Function

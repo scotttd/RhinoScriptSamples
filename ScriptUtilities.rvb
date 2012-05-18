@@ -4,7 +4,6 @@
 ' If not, I don't know who wrote it.
 ' Works with Rhino 4.0.
 '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-
 Option Explicit
 
 '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
@@ -33,4 +32,35 @@ Function IsUpperBound(ByVal arr)
     UBound arr
     If Err.Number = 0 Then IsUpperBound = True
   End If
+End Function
+
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+' Returns the number of dimensions to an array.
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+Public Function GetArrayDim(ByRef arrValue)
+  If IsArray(arrValue) Then
+    For i = 1 To 60
+      On Error Resume Next
+      UBound arrValue, i
+      If Err.Number <> 0 Then
+        GetArrayDim = i-1
+        Exit Function
+      End If
+    Next
+    GetArrayDim = i
+  Else
+    GetArrayDim = Null
+  End If
+End Function
+
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+' Includes, or loads, other RhinoScript files.
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+Public Function Include (strScriptName)
+  Dim oFS, oFile
+  Set oFS = CreateObject("Scripting.FileSystemObject")
+  Set oFile = oFS.OpenTextFile(strScriptName)
+  ExecuteGlobal oFile.ReadAll()
+  oFile.Close
+  Include = Null
 End Function
