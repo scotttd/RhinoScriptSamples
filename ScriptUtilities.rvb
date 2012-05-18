@@ -56,11 +56,21 @@ End Function
 '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 ' Includes, or loads, other RhinoScript files.
 '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-Public Function Include (strScriptName)
-  Dim oFS, oFile
-  Set oFS = CreateObject("Scripting.FileSystemObject")
-  Set oFile = oFS.OpenTextFile(strScriptName)
-  ExecuteGlobal oFile.ReadAll()
-  oFile.Close
-  Include = Null
-End Function
+Public Sub Include(strFile)
+  Dim objFSO, objFile, strPath
+  Const ForReading = 1
+  If IsString(strFile) Then
+    strPath = Rhino.FindFile(strFile)
+    If IsString(strPath) Then
+      Set objFSO = CreateObject("Scripting.FileSystemObject")
+      On Error Resume Next
+      Set objFile = objFSO.OpenTextFile(strPath, ForReading)
+      If (Err.Number = 0) Then
+        Call ExecuteGlobal(objFile.ReadAll())
+        objFile.Close
+      Else
+        Call Rhino.Print("Error including " & strPath)
+      End If
+    End If
+  End If
+End Sub
