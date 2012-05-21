@@ -1,5 +1,5 @@
 ﻿'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-' ExportLabels.rvb -- February 2012
+' ExportBlockLabels.rvb -- May 2012
 ' If this code works, it was written by Dale Fugier.
 ' If not, I don't know who wrote it.
 ' Works with Rhino 4.0.
@@ -7,23 +7,22 @@
 Option Explicit
 
 '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-' Description
-'   Exports a dimension's value and it's user text (labels)
-'   to a commma-delimited (.CSV) file.
+' ExportBlockLabels
 '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-Sub ExportLabels
+Sub ExportBlockLabels
   
 	' Local constants
-	Const RhAnnotations = 512
+	Const RhBlock = 4096
 
 	' Local variables
-	Dim arrDims, strDim, strValue, strUserText
+	Dim arrBlocks, strBlock, strName, arrObjects, strObject
+	Dim strDim, strValue, strUserText
 	Dim strFilter, strFileName, strLine
 	Dim objFSO, objStream
   
 	' Select some dimensions
-	arrDims = Rhino.GetObjects("Select dimensions with user-defined labels for export", RhAnnotations, True, True)
-	If IsNull(arrDims) Then Exit Sub
+	arrBlocks = Rhino.GetObjects("Select blocks with user-defined dimension labels for export", RhBlock, True, True)
+	If IsNull(arrBlocks) Then Exit Sub
 
 	' Define a file filter
 	strFilter = "Comma-Delimited File (*.csv)|*.csv||"
@@ -44,15 +43,29 @@ Sub ExportLabels
 	End If
 
 	' Process each selected dimension
-	For Each strDim In arrDims
-		If Rhino.IsDimension(strDim) Then
-			' Build a comma-delimited string to write
-			strUserText = Rhino.DimensionUserText(strDim)
-			strUserText = ParseDimensionUserText(strUserText)
-			strValue = CStr(Rhino.DimensionValue(strDim))
-			strLine = strUserText & "," & strValue
-			' Write to file
-			objStream.WriteLine(strLine)
+	For Each strBlock In arrBlocks
+    strDim = Null
+		If Rhino.IsBlockInstance(strBlock) Then
+		  strName = Rhino.BlockInstanceName(strBlock)
+		  arrObjects = Rhino.BlockObjects(strName)
+		  If IsArray(arrObjects) Then
+		    For Each strObject In arrObjects
+		      If Rhino.IsDimension(strObject) Then
+  		      strDim = strObject
+  		      Exit For
+  		    End If
+        Next
+      End If		    
+
+	    If Not IsNull(strDim) Then  
+  			' Build a comma-delimited string to write
+  			strUserText = Rhino.DimensionUserText(strDim)
+  			strUserText = ParseDimensionUserText(strUserText)
+  			strValue = CStr(Rhino.DimensionValue(strDim))
+  			strLine = strUserText & "," & strValue
+  			' Write to file
+  			objStream.WriteLine(strLine)
+		  End If
 		End If
 	Next
 
